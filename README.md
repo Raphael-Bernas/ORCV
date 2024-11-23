@@ -1,4 +1,6 @@
 ## Object recognition and computer vision 2024/2025
+This is the code from https://github.com/willowsierra/recvis24_a3
+
 
 ### Assignment 3: Sketch image classification
 [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1PxshEMwNm4tLu8f_Bz_Z0emUlC1TPob4?usp=sharing)
