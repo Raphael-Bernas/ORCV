@@ -60,10 +60,25 @@ class EfficientNetB7(nn.Module):
 class DINOv2Model(nn.Module):
     def __init__(self):
         super(DINOv2Model, self).__init__()
-        self.processor = AutoImageProcessor.from_pretrained("facebook/dinov2-base")
-        self.model = AutoModel.from_pretrained("facebook/dinov2-base")
-        self.model.classifier = nn.Linear(self.model.config.hidden_size, nclasses)
+        self.model = AutoModel.from_pretrained("facebook/dinov2-small")
+        for param in self.model.parameters():
+            param.requires_grad = False
+        self.classifier = nn.Linear(self.model.config.hidden_size, nclasses)
 
     def forward(self, x):
-        x = self.processor(images=x, return_tensors='pt', do_rescale=False)['pixel_values']
-        return self.model(x).logits
+        outputs = self.model(x)
+        logits = self.classifier(outputs.last_hidden_state[:, 0, :])
+        return logits
+    
+class DINOv2LModel(nn.Module):
+    def __init__(self):
+        super(DINOv2LModel, self).__init__()
+        self.model = AutoModel.from_pretrained("facebook/dinov2-large")
+        for param in self.model.parameters():
+            param.requires_grad = False
+        self.classifier = nn.Linear(self.model.config.hidden_size, nclasses)
+
+    def forward(self, x):
+        outputs = self.model(x)
+        logits = self.classifier(outputs.last_hidden_state[:, 0, :])
+        return logits
