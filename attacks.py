@@ -129,7 +129,27 @@ class pgd(attack):
             
     def init_summary(self):
         self.summary = {'losses':[]}
+    
+class gaussian_noise(attack):
+    def __init__(
+            self,
+            x_range = None,
+            epsilon = 0.1,
+            proj = 'l2',
+            std = 1.0
+            ):
+        super().__init__(x_range=x_range, epsilon=epsilon)
+        self.std = std
+        if isinstance(proj, str):
+            self.project = select_proj(proj)
+        else:
+            self.project = proj
         
+    def __call__(self, model, x, y):
+        self.init_delta(x)
+        self.delta.data.normal_(0, self.std)
+        self.project(self.delta, self.epsilon)
+        self.ensure_range(x)
 
 # class pgd(attack):
 #     def __init__(self, loss, epsilon=None, x_min=0.0, x_max=1.0, restarts=1, 

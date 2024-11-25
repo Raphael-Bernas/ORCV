@@ -7,7 +7,7 @@ import torch.optim as optim
 from torchvision import datasets
 
 from model_factory import ModelFactory
-from train import train_FLIP
+from train import train_FLIP, train_ADV
 import wandb
 
 
@@ -97,9 +97,16 @@ def opts() -> argparse.ArgumentParser:
     parser.add_argument(
         "--attack_method",
         type=str,
-        default=5,
-        metavar="Gaussian",
+        default="Gaussian",
+        metavar="AM",
         help="attack method to use",
+    )
+    parser.add_argument(
+        "--load_model",
+        type=str,
+        default="None",
+        metavar="LM",
+        help="Pre-trained model to load. You must not name your model 'None', usually it is of the form model_X.pth",
     )
     parser.add_argument(
         "--num_workers",
@@ -226,7 +233,12 @@ def main():
         os.makedirs(args.experiment)
 
     # load model and transform
-    model, data_transforms = ModelFactory(args.model_name).get_all()
+    if args.load_model != "None":
+        state_dict = torch.load(args.load_model)
+        model, data_transforms = ModelFactory(args.model_name).get_all()
+        model.load_state_dict(state_dict)
+    else:
+        model, data_transforms = ModelFactory(args.model_name).get_all()
     if use_cuda:
         print("Using GPU")
         model.cuda()
@@ -256,6 +268,8 @@ def main():
         print("Training with basic method")
     elif args.training_method == "FLIP":
         print("Training with FLIP method")
+    elif args.training_method == "ADV":
+        print("Training with adversarial method")
     else:
         raise ValueError("Unknown training method")
     
@@ -265,6 +279,8 @@ def main():
             train(model, optimizer, train_loader, use_cuda, epoch, args)
         elif args.training_method == "FLIP":
             train_FLIP(model, optimizer, train_loader, use_cuda, epoch, args)
+        elif args.training_method == "ADV":
+            train_ADV(model, optimizer, train_loader, use_cuda, epoch, args)
         else:
             raise ValueError("Unknown training method")
         # validation loop
