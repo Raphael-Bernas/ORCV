@@ -95,6 +95,13 @@ def opts() -> argparse.ArgumentParser:
         help="number of iterations for the FLIP training method (default: 5)",
     )
     parser.add_argument(
+        "--attack_method",
+        type=str,
+        default=5,
+        metavar="Gaussian",
+        help="attack method to use",
+    )
+    parser.add_argument(
         "--num_workers",
         type=int,
         default=10,

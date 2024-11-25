@@ -1,3 +1,6 @@
+##### This code originate from https://github.com/TimRoith/CLIP.git in branch newstruct/ #####
+
+
 import torch
 import matplotlib.pyplot as plt
 import torch.nn as nn
