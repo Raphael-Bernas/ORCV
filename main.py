@@ -247,7 +247,7 @@ def main():
     best_val_loss = 1e8
     if args.training_method == "basic":
         print("Training with basic method")
-    if args.training_method == "FLIP":
+    elif args.training_method == "FLIP":
         print("Training with FLIP method")
     else:
         raise ValueError("Unknown training method")
@@ -256,7 +256,7 @@ def main():
         # training loop
         if args.training_method == "basic":
             train(model, optimizer, train_loader, use_cuda, epoch, args)
-        if args.training_method == "FLIP":
+        elif args.training_method == "FLIP":
             train_FLIP(model, optimizer, train_loader, use_cuda, epoch, args)
         else:
             raise ValueError("Unknown training method")
