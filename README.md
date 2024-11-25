@@ -1,8 +1,22 @@
 ## ORCV : Assignment 3 - Raphael BERNAS
+You can test the following models :
 
+1. `Net`: A basic convolutional neural network model. - *basic_cnn*
+2. `BetterNet` : A multilayer convolutional neural network model. - *better_cnn*
+3. `EfficientNetB7`: A larger version of EfficientNet optimized for better performance. - *efficient_net*
+4. `DINOv2Model`: A model using DINOv2-small. - *dinov2*
+5. `DINOv2LModel`: A model using DINOv2-large. - *dinov2L*
+6. `DINOv2XLModel`: A model using DINOv2-giant. - *dinov2XL*
+7. `DeiTModel`: A model using DeiT-base. - *deit*
 
+And you can test different training method for those : 
 
+1. `Adversarial` : Perturb the data to increase robustness [-- training_method ADV] [-- epsilon 0.01]
+- `Gaussian` : Add a gaussian noise [-- attack_method Gaussian]
+- `FGSM` : Add a noise based on gradient sign [-- attack_method FGSM]
+- `PGD` : Add a perturbation projected for gradient descent [-- attack_method PGD]
 
+2. `FLIP` : Regularization training on the lipschitz constant [-- training_method FLIP] [-- lamda 0.01]
 
 
 
