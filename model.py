@@ -82,3 +82,29 @@ class DINOv2LModel(nn.Module):
         outputs = self.model(x)
         logits = self.classifier(outputs.last_hidden_state[:, 0, :])
         return logits
+
+class DINOv2XLModel(nn.Module):
+    def __init__(self):
+        super(DINOv2XLModel, self).__init__()
+        self.model = AutoModel.from_pretrained("facebook/dinov2-giant-imagenet1k-1-layer")
+        for param in self.model.parameters():
+            param.requires_grad = False
+        self.classifier = nn.Linear(self.model.config.hidden_size, nclasses)
+
+    def forward(self, x):
+        outputs = self.model(x)
+        logits = self.classifier(outputs.last_hidden_state[:, 0, :])
+        return logits
+    
+class DeiTModel(nn.Module):
+    def __init__(self):
+        super(DeiTModel, self).__init__()
+        self.model = AutoModel.from_pretrained("facebook/deit-base-patch16-224")
+        for param in self.model.parameters():
+            param.requires_grad = False
+        self.classifier = nn.Linear(self.model.config.hidden_size, nclasses)
+
+    def forward(self, x):
+        outputs = self.model(x)
+        logits = self.classifier(outputs.last_hidden_state[:, 0, :])
+        return logits

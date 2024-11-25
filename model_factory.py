@@ -1,8 +1,8 @@
 """Python file to instantite the model and the transform that goes with it."""
 
-from data import data_transforms, data_transforms_efficientNet, data_transforms_DINOV2, data_transforms_DINOV2L
+from data import data_transforms, data_transforms_efficientNet, data_transforms_DINOV2, data_transforms_DINOV2L, data_transforms_DINOV2XL, data_transforms_DeiT
 from model import Net
-from model import BetterNet, DINOv2Model, EfficientNetB7, DINOv2LModel
+from model import BetterNet, DINOv2Model, EfficientNetB7, DINOv2LModel, DINOv2XLModel, DeiTModel
 
 
 class ModelFactory:
@@ -22,6 +22,10 @@ class ModelFactory:
             return DINOv2Model()
         if self.model_name == "dinov2L":
             return DINOv2LModel()
+        if self.model_name == "dinov2XL":
+            return DINOv2XLModel()
+        if self.model_name == "deit":
+            return DeiTModel()
         else:
             raise NotImplementedError("Model not implemented")
 
@@ -35,6 +39,10 @@ class ModelFactory:
         if self.model_name == "dinov2":
             return data_transforms_DINOV2
         if self.model_name == "dinov2L":
+            return data_transforms_DINOV2L
+        if self.model_name == "dinov2XL":
+            return data_transforms_DINOV2L
+        if self.model_name == "deit":
             return data_transforms_DINOV2L
         else:
             raise NotImplementedError("Transform not implemented")

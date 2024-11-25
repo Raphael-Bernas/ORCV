@@ -36,8 +36,30 @@ data_transforms_DINOV2 = transforms.Compose(
 # Initialize the processor
 processor = AutoImageProcessor.from_pretrained("facebook/dinov2-large")
 
-# Preprocess images to match DINOv2 input size and normalization
+# Preprocess images to match DINOv2L input size and normalization
 data_transforms_DINOV2L = transforms.Compose(
+    [
+        transforms.Resize((224, 224)),
+        transforms.Lambda(lambda x: processor(images=x, return_tensors='pt')['pixel_values'].squeeze(0))  # Apply processor
+    ]
+)
+
+# Initialize the processor
+processor = AutoImageProcessor.from_pretrained("facebook/dinov2-giant-imagenet1k-1-layer")
+
+# Preprocess images to match DINOv2XL input size and normalization
+data_transforms_DINOV2XL = transforms.Compose(
+    [
+        transforms.Resize((224, 224)),
+        transforms.Lambda(lambda x: processor(images=x, return_tensors='pt')['pixel_values'].squeeze(0))  # Apply processor
+    ]
+)
+
+# Initialize the processor
+processor = AutoImageProcessor.from_pretrained("facebook/deit-base-patch16-224")
+
+# Preprocess images to match DINOv2XL input size and normalization
+data_transforms_DeiT = transforms.Compose(
     [
         transforms.Resize((224, 224)),
         transforms.Lambda(lambda x: processor(images=x, return_tensors='pt')['pixel_values'].squeeze(0))  # Apply processor
