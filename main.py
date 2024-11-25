@@ -102,6 +102,13 @@ def opts() -> argparse.ArgumentParser:
         help="attack method to use",
     )
     parser.add_argument(
+        "--epsilon",
+        type=float,
+        default=1e-2,
+        metavar="Eps",
+        help="attack epsilon for the adversarial training method (default: 1e-2)",
+    )
+    parser.add_argument(
         "--load_model",
         type=str,
         default="None",
