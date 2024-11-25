@@ -7,6 +7,7 @@ import torch.optim as optim
 from torchvision import datasets
 
 from model_factory import ModelFactory
+from train import train_FLIP
 import wandb
 
 
@@ -71,6 +72,27 @@ def opts() -> argparse.ArgumentParser:
         default="experiment",
         metavar="E",
         help="folder where experiment outputs are located.",
+    )
+    parser.add_argument(
+        "--training_method",
+        type=str,
+        default="basic",
+        metavar="TM",
+        help="training method to use",
+    )
+    parser.add_argument(
+        "--lamda",
+        type=float,
+        default=1e-2,
+        metavar="La",
+        help="regularization parameter for FLIP (default: 1e-2)",
+    )
+    parser.add_argument(
+        "--train_method_iteration",
+        type=int,
+        default=5,
+        metavar="TMI",
+        help="number of iterations for the FLIP training method (default: 5)",
     )
     parser.add_argument(
         "--num_workers",
@@ -223,9 +245,21 @@ def main():
 
     # Loop over the epochs
     best_val_loss = 1e8
+    if args.training_method == "basic":
+        print("Training with basic method")
+    if args.training_method == "FLIP":
+        print("Training with FLIP method")
+    else:
+        raise ValueError("Unknown training method")
+    
     for epoch in range(1, args.epochs + 1):
         # training loop
-        train(model, optimizer, train_loader, use_cuda, epoch, args)
+        if args.training_method == "basic":
+            train(model, optimizer, train_loader, use_cuda, epoch, args)
+        if args.training_method == "FLIP":
+            train_FLIP(model, optimizer, train_loader, use_cuda, epoch, args)
+        else:
+            raise ValueError("Unknown training method")
         # validation loop
         val_loss = validation(model, val_loader, use_cuda)
         if val_loss < best_val_loss:
@@ -233,6 +267,11 @@ def main():
             best_val_loss = val_loss
             best_model_file = args.experiment + "/model_best.pth"
             torch.save(model.state_dict(), best_model_file)
+            if args.training_method == "FLIP":
+                args.lamda = min(args.lamda + 5e-4, 4e-1)
+        else:
+            if args.training_method == "FLIP":
+                args.lamda = max(args.lamda - 5e-4, 1e-4)
         # also save the model every epoch
         model_file = args.experiment + "/model_" + str(epoch) + ".pth"
         torch.save(model.state_dict(), model_file)

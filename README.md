@@ -1,3 +1,24 @@
+## ORCV : Assignment 3 - Raphael BERNAS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## ORIGINAL READ ME :
 ## Object recognition and computer vision 2024/2025
 This is the code from https://github.com/willowsierra/recvis24_a3
 
