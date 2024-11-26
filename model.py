@@ -110,7 +110,7 @@ class DeiTModel(nn.Module):
         return logits
     
 class dinov2test(nn.Module):
-    def __init__(self, nclasses):
+    def __init__(self):
         super(dinov2test, self).__init__()
         self.model = AutoModel.from_pretrained("facebook/dinov2-large")
         for param in self.model.parameters():
