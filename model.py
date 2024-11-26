@@ -108,3 +108,25 @@ class DeiTModel(nn.Module):
         outputs = self.model(x)
         logits = self.classifier(outputs.last_hidden_state[:, 0, :])
         return logits
+    
+class dinov2test(nn.Module):
+    def __init__(self, nclasses):
+        super(dinov2test, self).__init__()
+        self.model = AutoModel.from_pretrained("facebook/dinov2-large")
+        for param in self.model.parameters():
+            param.requires_grad = False
+        
+        hidden_dim = 512 
+        self.hidden_layer = nn.Sequential(
+            nn.Linear(self.model.config.hidden_size, hidden_dim),
+            nn.LayerNorm(hidden_dim), 
+            nn.GELU(),
+            nn.Dropout(0.3)
+        )
+        self.classifier = nn.Linear(hidden_dim, nclasses)
+
+    def forward(self, x):
+        outputs = self.model(x)
+        features = self.hidden_layer(outputs.last_hidden_state[:, 0, :])
+        logits = self.classifier(features)
+        return logits
