@@ -2,7 +2,7 @@
 
 from data import data_transforms, data_transforms_efficientNet, data_transforms_DINOV2, data_transforms_DINOV2L, data_transforms_DINOV2XL, data_transforms_DeiT
 from model import Net
-from model import BetterNet, DINOv2Model, EfficientNetB7, DINOv2LModel, DINOv2XLModel, DeiTModel
+from model import BetterNet, DINOv2Model, EfficientNetB7, DINOv2LModel, DINOv2XLModel, DeiTModel, dinov2test
 
 
 class ModelFactory:
@@ -26,6 +26,8 @@ class ModelFactory:
             return DINOv2XLModel()
         if self.model_name == "deit":
             return DeiTModel()
+        if self.model_name == "dinov2test":
+            return dinov2test()
         else:
             raise NotImplementedError("Model not implemented")
 
@@ -43,6 +45,8 @@ class ModelFactory:
         if self.model_name == "dinov2XL":
             return data_transforms_DINOV2L
         if self.model_name == "deit":
+            return data_transforms_DeiT
+        if self.model_name == "dinov2test":
             return data_transforms_DINOV2L
         else:
             raise NotImplementedError("Transform not implemented")
